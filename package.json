@@ -3,7 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.0.2",
+    "@apollo/client": "3.5.10",
+    "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "graphql": "^15.8.0",
+    "node-fetch": "^3.3.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "styled-components": "^5.1.1",
+    "waait": "^1.0.5"
+  },
+  "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^10.4.7",
     "@testing-library/react-hooks": "^3.4.1",
@@ -18,31 +31,21 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-test-renderer": "^16.9.2",
     "@types/sinon": "^9.0.4",
+    "@types/styled-components": "^5.1.1",
     "@types/testing-library__react-hooks": "^3.3.0",
-    "apollo-client": "^2.6.10",
-    "apollo-test-utils": "^0.3.2",
-    "axios": "^0.19.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
-    "graphql": "^15.3.0",
-    "graphql-tag": "^2.10.4",
-    "react": "^16.9.2",
-    "react-apollo": "^3.1.5",
-    "react-apollo-test-utils": "^0.0.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "jest-runner-prettier": "^0.3.6",
+    "prettier": "^2.0.5",
     "react-test-renderer": "^16.13.1",
     "sinon": "^9.0.2",
-    "styled-components": "^5.1.1",
-    "typescript": "~3.7.2",
-    "typescript-styled-plugin": "^0.15.0",
-    "waait": "^1.0.5"
+    "typescript": "^3.9.10",
+    "typescript-styled-plugin": "^0.15.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
+    "test": "NODE_OPTIONS=--openssl-legacy-provider react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -59,10 +62,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/styled-components": "^5.1.1",
-    "jest-runner-prettier": "^0.3.6",
-    "prettier": "^2.0.5"
   }
 }
