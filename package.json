@@ -7,7 +7,8 @@
     "axios": "^0.19.2",
     "cors": "^2.8.5",
     "express": "^5.2.1",
-    "graphql": "^15.8.0",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.10.1",
     "node-fetch": "^3.3.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -40,10 +41,13 @@
     "react-test-renderer": "^16.13.1",
     "sinon": "^9.0.2",
     "typescript": "^3.9.10",
-    "typescript-styled-plugin": "^0.15.0"
+    "typescript-styled-plugin": "^0.15.0",
+    "concurrently": "^8.2.0"
   },
   "scripts": {
-    "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+    "start:server": "node server/server.js",
+    "start:client": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
     "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "NODE_OPTIONS=--openssl-legacy-provider react-scripts test",
     "eject": "react-scripts eject"
