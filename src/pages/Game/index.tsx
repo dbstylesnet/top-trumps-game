@@ -21,12 +21,15 @@ interface Person {
 
 type GameItem = Starship | Person;
 
+type Category = 'starships' | 'persons' | null;
+
 interface GameState {
   scores: string[];
   scoreI: number;
   scoreII: number;
   isPlayerITurn: boolean;
   isTurnStarted: boolean;
+  selectedCategory: Category;
   starships: Starship[];
   persons: Person[];
 }
@@ -41,13 +44,15 @@ const Game = () => {
     scoreII: 0,
     isPlayerITurn: true,
     isTurnStarted: false,
+    selectedCategory: null,
     starships: [],
     persons: [],
   });
 
-  // Update state after data fetch
   useEffect(() => {
     if (data) {
+
+      // console.log("data:", data);
       setGameState((prev) => ({
         ...prev,
         starships: data.allStarships.starships,
@@ -56,25 +61,45 @@ const Game = () => {
     }
   }, [data]);
 
-  const onTurnStart = () => {
-    if (!data) return;
-
-    const assignedStarships = [...gameState.starships]
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 2);
-    const assignedPersons = [...gameState.persons]
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 2);
-
+  const onCategorySelect = (category: 'starships' | 'persons') => {
     setGameState((prev) => ({
       ...prev,
-      isTurnStarted: true,
-      starships: assignedStarships,
-      persons: assignedPersons,
+      selectedCategory: category,
     }));
   };
 
-const handleClick = (isStarship: boolean) => {
+  const onTurnStart = () => {
+    if (!data || !gameState.selectedCategory) return;
+
+    if (gameState.selectedCategory === 'starships') {
+      const assignedStarships = [...data.allStarships.starships]
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 2);
+
+      setGameState((prev) => ({
+        ...prev,
+        isTurnStarted: true,
+        starships: assignedStarships,
+        persons: [],
+      }));
+    } else {
+      const assignedPersons = [...data.allPeople.people]
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 2);
+
+      setGameState((prev) => ({
+        ...prev,
+        isTurnStarted: true,
+        starships: [],
+        persons: assignedPersons,
+      }));
+    }
+  };
+
+const handleClick = () => {
+  if (!gameState.selectedCategory) return;
+
+  const isStarship = gameState.selectedCategory === 'starships';
   const playerOne = isStarship
     ? (gameState.starships[0] as Starship)
     : (gameState.persons[0] as Person);
@@ -118,6 +143,7 @@ const handleClick = (isStarship: boolean) => {
       scoreII: 0,
       isPlayerITurn: true,
       isTurnStarted: false,
+      selectedCategory: null,
       starships: [],
       persons: [],
     });
@@ -127,55 +153,81 @@ const handleClick = (isStarship: boolean) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  // Show category selection if no category is selected
+  if (!gameState.selectedCategory) {
+    return (
+      <GamePage>
+        <Header
+          scores={gameState.scores}
+          scoreI={gameState.scoreI}
+          scoreII={gameState.scoreII}
+          onStartOver={onStartOver}
+        />
+        <h1>Select Category</h1>
+        <p>Choose a category to play with:</p>
+        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '20px' }}>
+          <Button callback={() => onCategorySelect('starships')} text="Starships" />
+          <Button callback={() => onCategorySelect('persons')} text="Persons" />
+        </div>
+      </GamePage>
+    );
+  }
+
   return (
     <GamePage>
       <Header
         scores={gameState.scores}
         scoreI={gameState.scoreI}
         scoreII={gameState.scoreII}
+        onStartOver={onStartOver}
       />
-
-      {gameState.starships.length > 0 && <h2>Starships</h2>}
-      <div className="cards-container">
-        {gameState.starships.map((starship, index) => (
-          <Card
-            key={starship.id}
-            onCardClick={() => handleClick(true)}
-            playerITurn={gameState.isPlayerITurn}
-            isTurnStarted={gameState.isTurnStarted}
-            cardType="Starship"
-            attribute="Drive"
-            name={starship.name}
-            attrValue={starship.hyperdriveRating}
-            player={index}
-          />
-        ))}
-      </div>
-
-      {gameState.persons.length > 0 && <h2>Persons</h2>}
-      <div className="cards-container">
-        {gameState.persons.map((person, index) => (
-          <Card
-            key={person.id}
-            onCardClick={() => handleClick(false)}
-            playerITurn={gameState.isPlayerITurn}
-            isTurnStarted={gameState.isTurnStarted}
-            cardType="Person"
-            attribute="Height"
-            name={person.name}
-            attrValue={person.height}
-            player={index}
-          />
-        ))}
-      </div>
 
       {gameState.isTurnStarted && (
         <h2>Player {gameState.isPlayerITurn ? 'I' : 'II'} chooses card</h2>
       )}
 
-      <Button callback={onTurnStart} text="Next turn" />
-      <Button callback={onStartOver} text="Start New Game" />
-      <span>made by dbstyles</span>
+      <Button callback={onTurnStart} text="Draw new cards" />
+
+      {<h1>All cards</h1>}
+
+      {gameState.selectedCategory === 'starships' && gameState.starships.length > 0 && <h2>Starships</h2>}
+      {gameState.selectedCategory === 'starships' && (
+        <div className="cards-container">
+          {gameState.starships.map((starship, index) => (
+            <Card
+              key={starship.id}
+              onCardClick={handleClick}
+              playerITurn={gameState.isPlayerITurn}
+              isTurnStarted={gameState.isTurnStarted}
+              cardType="Starship"
+              attribute="Drive"
+              name={starship.name}
+              attrValue={starship.hyperdriveRating}
+              playerIndex={index}
+            />
+          ))}
+        </div>
+      )}
+
+      {gameState.selectedCategory === 'persons' && gameState.persons.length > 0 && <h2>Persons</h2>}
+      {gameState.selectedCategory === 'persons' && (
+        <div className="cards-container">
+          {gameState.persons.map((person, index) => (
+            <Card
+              key={person.id}
+              onCardClick={handleClick}
+              playerITurn={gameState.isPlayerITurn}
+              isTurnStarted={gameState.isTurnStarted}
+              cardType="Person"
+              attribute="Height"
+              name={person.name}
+              attrValue={person.height}
+              playerIndex={index}
+            />
+          ))}
+        </div>
+      )}
+
     </GamePage>
   );
 };

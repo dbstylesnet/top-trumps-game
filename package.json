@@ -2,6 +2,7 @@
   "name": "typescript-react",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@apollo/client": "3.5.10",
     "axios": "^0.19.2",

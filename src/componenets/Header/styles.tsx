@@ -12,19 +12,25 @@ const HeaderStyles = styled.div`
         color: white;
     }
 
+    .score-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px auto;
+        flex-wrap: wrap;
+    }
+
+    .start-new-game-button,
     .history-link {
-        display: block;
-        font-size: 15px;
-        text-transform: uppercase;
-        position: absolute;
-        top: 10%;
-        right: 20%;
+        button {
+            margin: 0;
+        }
     }
 
     .score {
         border: 1px solid #61dafb;
         width: 200px;
-        margin: 0 auto;
         color: white;
         padding: 15px 0;
         font-size: 20px;
