@@ -25,6 +25,7 @@ const HeaderStyles = styled.div`
     .history-link {
         button {
             margin: 0;
+            min-width: auto;
         }
     }
 

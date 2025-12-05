@@ -64,10 +64,19 @@ const Game = () => {
   }, [data]);
 
   const onCategorySelect = (category: 'starships' | 'persons') => {
-    setGameState((prev) => ({
-      ...prev,
-      selectedCategory: category,
-    }));
+    if (data) {
+      setGameState((prev) => ({
+        ...prev,
+        selectedCategory: category,
+        starships: category === 'starships' ? data.allStarships.starships : [],
+        persons: category === 'persons' ? data.allPeople.people : [],
+      }));
+    } else {
+      setGameState((prev) => ({
+        ...prev,
+        selectedCategory: category,
+      }));
+    }
   };
 
   const onTurnStart = () => {
@@ -144,17 +153,31 @@ const handleClick = () => {
 
 
   const onStartOver = () => {
-    setGameState({
-      scores: [],
-      scoreI: 0,
-      scoreII: 0,
-      isPlayerITurn: true,
-      isTurnStarted: false,
-      selectedCategory: null,
-      starships: [],
-      persons: [],
-      winnerMessage: null,
-    });
+    if (data) {
+      setGameState({
+        scores: [],
+        scoreI: 0,
+        scoreII: 0,
+        isPlayerITurn: true,
+        isTurnStarted: false,
+        selectedCategory: null,
+        starships: data.allStarships.starships,
+        persons: data.allPeople.people,
+        winnerMessage: null,
+      });
+    } else {
+      setGameState({
+        scores: [],
+        scoreI: 0,
+        scoreII: 0,
+        isPlayerITurn: true,
+        isTurnStarted: false,
+        selectedCategory: null,
+        starships: [],
+        persons: [],
+        winnerMessage: null,
+      });
+    }
     setHistoryScores([]);
   };
 

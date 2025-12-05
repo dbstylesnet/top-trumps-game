@@ -1,18 +1,29 @@
 import styled from 'styled-components'
 
 const ButtonStyles = styled.button`
-    color: white;
-    width: 200px;
-    padding: 15px;
-    display: block;
-    border: 1px solid #00805c;
-    margin: 50px auto;
-    background: rgba(0, 0, 0, .1);
+    background-color: #212121;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    color: #4CAF50;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    min-width: 200px;
+    
     &:hover {
-        background: rgba(0, 0, 0, .3);
-        transition: background 0.2s ease-in-out;
-        cursor: pointer;
+        background-color: #4CAF50;
+        color: #212121;
     }
+    
+    &:focus {
+        outline: none;
+    }
+    
     div {
         padding: 0 0 10px 0 ;
     }
