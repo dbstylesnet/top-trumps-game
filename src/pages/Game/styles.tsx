@@ -19,8 +19,19 @@ const GamePage = styled.div`
     .cards-container {
         display: flex;
         width: 100%;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        align-items: stretch;
+        
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
         div {
-            flex: 1;
+            flex: 0 1 auto;
         }
     }
 `

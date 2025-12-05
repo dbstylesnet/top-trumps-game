@@ -32,6 +32,7 @@ interface GameState {
   selectedCategory: Category;
   starships: Starship[];
   persons: Person[];
+  winnerMessage: string | null;
 }
 
 const Game = () => {
@@ -47,6 +48,7 @@ const Game = () => {
     selectedCategory: null,
     starships: [],
     persons: [],
+    winnerMessage: null,
   });
 
   useEffect(() => {
@@ -81,6 +83,7 @@ const Game = () => {
         isTurnStarted: true,
         starships: assignedStarships,
         persons: [],
+        winnerMessage: null,
       }));
     } else {
       const assignedPersons = [...data.allPeople.people]
@@ -92,6 +95,7 @@ const Game = () => {
         isTurnStarted: true,
         starships: [],
         persons: assignedPersons,
+        winnerMessage: null,
       }));
     }
   };
@@ -121,6 +125,8 @@ const handleClick = () => {
       ? 'II'
       : 'D';
 
+  const winnerMessage = winner === 'D' ? 'Draw!' : `Player ${winner} wins!`;
+
   const scores = [...gameState.scores, winner];
 
   setGameState((prev) => ({
@@ -130,6 +136,7 @@ const handleClick = () => {
     scoreII: winner === 'II' ? prev.scoreII + 1 : prev.scoreII,
     isPlayerITurn: winner === 'I' || (winner === 'D' && prev.isPlayerITurn),
     isTurnStarted: false,
+    winnerMessage,
   }));
 
   setHistoryScores(scores);
@@ -146,6 +153,7 @@ const handleClick = () => {
       selectedCategory: null,
       starships: [],
       persons: [],
+      winnerMessage: null,
     });
     setHistoryScores([]);
   };
@@ -184,6 +192,12 @@ const handleClick = () => {
 
       {gameState.isTurnStarted && (
         <h2>Player {gameState.isPlayerITurn ? 'I' : 'II'} chooses card</h2>
+      )}
+
+      {gameState.winnerMessage && (
+        <h2 style={{ color: '#61dafb', textAlign: 'center', margin: '20px 0' }}>
+          {gameState.winnerMessage}
+        </h2>
       )}
 
       <Button callback={onTurnStart} text="Draw new cards" />

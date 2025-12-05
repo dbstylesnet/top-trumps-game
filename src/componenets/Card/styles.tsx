@@ -4,11 +4,14 @@ const CardStyles = styled.div.withConfig({
   shouldForwardProp: (prop) => (prop as string) !== 'disabled',
 })<{ disabled: boolean }>`
   color: white;
-  width: 200px;
+  min-width: 200px;
+  max-width: 300px;
+  width: 100%;
   padding: 15px;
   border: 1px solid #00805c;
-  margin: 50px auto;
+  margin: 0;
   background: rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 
   pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
 
@@ -20,6 +23,17 @@ const CardStyles = styled.div.withConfig({
   }
 
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    min-width: 250px;
+    max-width: 250px;
+  }
 
   div {
     padding: 0 0 10px 0;
