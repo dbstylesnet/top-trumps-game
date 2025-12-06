@@ -13,6 +13,9 @@ export const GET_STARSHIPS_AND_PEOPLE = gql`
         id
         name
         hyperdriveRating
+        maxSpeed
+        crewSize
+        cargoCapacity
       }
     }
     allPeople {
@@ -20,6 +23,9 @@ export const GET_STARSHIPS_AND_PEOPLE = gql`
         id
         name
         height
+        mass
+        birthYear
+        forceSensitivity
       }
     }
   }

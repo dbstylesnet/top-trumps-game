@@ -1,46 +1,59 @@
 import React from 'react';
 import CardStyles from './styles';
 
+interface Attribute {
+    name: string;
+    value: number;
+}
+
 interface CardProps {
     isTurnStarted: boolean;
     playerITurn: boolean;
     cardType?: string;
-    attribute: string;
-    attrValue: number;
+    attributes: Attribute[];
     name: string;
     playerIndex: number;
-    onCardClick?: () => void;
+    onAttributeClick?: (attributeName: string) => void;
+    selectedAttribute: string | null;
 }
 
 const Card = ({
     isTurnStarted,
     playerITurn,
-    attribute,
-    attrValue,
+    attributes,
     name,
     playerIndex,
-    onCardClick,
+    onAttributeClick,
+    selectedAttribute,
 }: CardProps) => {
-    // Determine if the attribute should be shown
+    // Determine if the attributes should be shown
     const canReveal =
         !isTurnStarted ||
         (playerIndex === 0 && playerITurn) ||
         (playerIndex === 1 && !playerITurn);
 
-    // Only clickable if attribute is hidden (i.e., "?")
-    const isDisabled = canReveal;
-
     return (
-        <CardStyles
-            disabled={isDisabled}
-            onClick={isDisabled ? undefined : onCardClick}
-        >
-            <div></div>
-            <span>Name: {name}</span>
-            <div></div>
-            <span>
-                {attribute}: {canReveal ? attrValue : "?"}
-            </span>
+        <CardStyles>
+            <div className="card-name">Name: {name}</div>
+            <div className="attributes-container">
+                {attributes.map((attr) => {
+                    const isSelected = selectedAttribute === attr.name;
+                    const isClickable = !canReveal && isTurnStarted && onAttributeClick;
+                    
+                    return (
+                        <div
+                            key={attr.name}
+                            className={`attribute ${isSelected ? 'selected' : ''} ${isClickable ? 'clickable' : ''}`}
+                            onClick={isClickable ? () => onAttributeClick?.(attr.name) : undefined}
+                        >
+                            <span className="attribute-name">{attr.name}:</span>
+                            <span className="attribute-value">
+                                {canReveal ? attr.value : "?"}
+                            </span>
+                        </div>
+                    );
+                })}
+            </div>
         </CardStyles>
     );
 };

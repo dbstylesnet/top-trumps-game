@@ -11,13 +11,22 @@ interface Starship {
   id: string;
   name: string;
   hyperdriveRating: number;
+  maxSpeed: number;
+  crewSize: number;
+  cargoCapacity: number; // Float in GraphQL, number in TypeScript
 }
 
 interface Person {
   id: string;
   name: string;
   height: number;
+  mass: number;
+  birthYear: number;
+  forceSensitivity: number;
 }
+
+type StarshipAttribute = 'hyperdriveRating' | 'maxSpeed' | 'crewSize' | 'cargoCapacity';
+type PersonAttribute = 'height' | 'mass' | 'birthYear' | 'forceSensitivity';
 
 type GameItem = Starship | Person;
 
@@ -33,6 +42,7 @@ interface GameState {
   starships: Starship[];
   persons: Person[];
   winnerMessage: string | null;
+  selectedAttribute: string | null;
 }
 
 const Game = () => {
@@ -49,6 +59,7 @@ const Game = () => {
     starships: [],
     persons: [],
     winnerMessage: null,
+    selectedAttribute: null,
   });
 
   useEffect(() => {
@@ -93,6 +104,7 @@ const Game = () => {
         starships: assignedStarships,
         persons: [],
         winnerMessage: null,
+        selectedAttribute: null,
       }));
     } else {
       const assignedPersons = [...data.allPeople.people]
@@ -105,51 +117,72 @@ const Game = () => {
         starships: [],
         persons: assignedPersons,
         winnerMessage: null,
+        selectedAttribute: null,
       }));
     }
   };
 
-const handleClick = () => {
-  if (!gameState.selectedCategory) return;
+  const handleAttributeClick = (attributeName: string) => {
+    if (!gameState.selectedCategory || !gameState.isTurnStarted) return;
 
-  const isStarship = gameState.selectedCategory === 'starships';
-  const playerOne = isStarship
-    ? (gameState.starships[0] as Starship)
-    : (gameState.persons[0] as Person);
-  const playerTwo = isStarship
-    ? (gameState.starships[1] as Starship)
-    : (gameState.persons[1] as Person);
+    setGameState((prev) => ({
+      ...prev,
+      selectedAttribute: attributeName,
+    }));
 
-  const attributeValueI = isStarship
-    ? (playerOne as Starship).hyperdriveRating
-    : (playerOne as Person).height;
-  const attributeValueII = isStarship
-    ? (playerTwo as Starship).hyperdriveRating
-    : (playerTwo as Person).height;
+    // Compare the selected attribute
+    const isStarship = gameState.selectedCategory === 'starships';
+    const playerOne = isStarship
+      ? (gameState.starships[0] as Starship)
+      : (gameState.persons[0] as Person);
+    const playerTwo = isStarship
+      ? (gameState.starships[1] as Starship)
+      : (gameState.persons[1] as Person);
 
-  const winner =
-    attributeValueI > attributeValueII
-      ? 'I'
-      : attributeValueI < attributeValueII
-      ? 'II'
-      : 'D';
+    let attributeValueI: number;
+    let attributeValueII: number;
 
-  const winnerMessage = winner === 'D' ? 'Draw!' : `Player ${winner} wins!`;
+    if (isStarship) {
+      const starshipOne = playerOne as Starship;
+      const starshipTwo = playerTwo as Starship;
+      attributeValueI = starshipOne[attributeName as StarshipAttribute];
+      attributeValueII = starshipTwo[attributeName as StarshipAttribute];
+    } else {
+      const personOne = playerOne as Person;
+      const personTwo = playerTwo as Person;
+      attributeValueI = personOne[attributeName as PersonAttribute];
+      attributeValueII = personTwo[attributeName as PersonAttribute];
+    }
 
-  const scores = [...gameState.scores, winner];
+    const winner =
+      attributeValueI > attributeValueII
+        ? 'I'
+        : attributeValueI < attributeValueII
+        ? 'II'
+        : 'D';
 
-  setGameState((prev) => ({
-    ...prev,
-    scores,
-    scoreI: winner === 'I' ? prev.scoreI + 1 : prev.scoreI,
-    scoreII: winner === 'II' ? prev.scoreII + 1 : prev.scoreII,
-    isPlayerITurn: winner === 'I' || (winner === 'D' && prev.isPlayerITurn),
-    isTurnStarted: false,
-    winnerMessage,
-  }));
+    const attributeDisplayName = attributeName
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, (str) => str.toUpperCase())
+      .trim();
+    const winnerMessage = winner === 'D' 
+      ? `Draw on ${attributeDisplayName}!` 
+      : `Player ${winner} wins on ${attributeDisplayName}!`;
 
-  setHistoryScores(scores);
-};
+    const scores = [...gameState.scores, winner];
+
+    setGameState((prev) => ({
+      ...prev,
+      scores,
+      scoreI: winner === 'I' ? prev.scoreI + 1 : prev.scoreI,
+      scoreII: winner === 'II' ? prev.scoreII + 1 : prev.scoreII,
+      isPlayerITurn: winner === 'I' || (winner === 'D' && prev.isPlayerITurn),
+      isTurnStarted: false,
+      winnerMessage,
+    }));
+
+    setHistoryScores(scores);
+  };
 
 
   const onStartOver = () => {
@@ -164,6 +197,7 @@ const handleClick = () => {
         starships: data.allStarships.starships,
         persons: data.allPeople.people,
         winnerMessage: null,
+        selectedAttribute: null,
       });
     } else {
       setGameState({
@@ -176,6 +210,7 @@ const handleClick = () => {
         starships: [],
         persons: [],
         winnerMessage: null,
+        selectedAttribute: null,
       });
     }
     setHistoryScores([]);
@@ -213,8 +248,8 @@ const handleClick = () => {
         onStartOver={onStartOver}
       />
 
-      {gameState.isTurnStarted && (
-        <h2>Player {gameState.isPlayerITurn ? 'I' : 'II'} chooses card</h2>
+      {gameState.isTurnStarted && !gameState.selectedAttribute && (
+        <h2>Player {gameState.isPlayerITurn ? 'I' : 'II'} - Click an attribute to compare</h2>
       )}
 
       {gameState.winnerMessage && (
@@ -233,14 +268,19 @@ const handleClick = () => {
           {gameState.starships.map((starship, index) => (
             <Card
               key={starship.id}
-              onCardClick={handleClick}
+              onAttributeClick={handleAttributeClick}
               playerITurn={gameState.isPlayerITurn}
               isTurnStarted={gameState.isTurnStarted}
               cardType="Starship"
-              attribute="Drive"
+              attributes={[
+                { name: 'hyperdriveRating', value: starship.hyperdriveRating },
+                { name: 'maxSpeed', value: starship.maxSpeed },
+                { name: 'crewSize', value: starship.crewSize },
+                { name: 'cargoCapacity', value: starship.cargoCapacity },
+              ]}
               name={starship.name}
-              attrValue={starship.hyperdriveRating}
               playerIndex={index}
+              selectedAttribute={gameState.selectedAttribute}
             />
           ))}
         </div>
@@ -252,14 +292,19 @@ const handleClick = () => {
           {gameState.persons.map((person, index) => (
             <Card
               key={person.id}
-              onCardClick={handleClick}
+              onAttributeClick={handleAttributeClick}
               playerITurn={gameState.isPlayerITurn}
               isTurnStarted={gameState.isTurnStarted}
               cardType="Person"
-              attribute="Height"
+              attributes={[
+                { name: 'height', value: person.height },
+                { name: 'mass', value: person.mass },
+                { name: 'birthYear', value: person.birthYear },
+                { name: 'forceSensitivity', value: person.forceSensitivity },
+              ]}
               name={person.name}
-              attrValue={person.height}
               playerIndex={index}
+              selectedAttribute={gameState.selectedAttribute}
             />
           ))}
         </div>
