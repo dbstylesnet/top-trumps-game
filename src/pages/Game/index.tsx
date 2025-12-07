@@ -229,17 +229,13 @@ const Game = () => {
           scoreII={gameState.scoreII}
           onStartOver={onStartOver}
         />
-        <h1>Select Category</h1>
-        <p>Choose a category to play with:</p>
-        <div style={{ 
-          display: 'flex', 
-          gap: '30px', 
-          justifyContent: 'center', 
-          marginTop: '40px',
-          flexWrap: 'wrap'
-        }}>
-          <Button callback={() => onCategorySelect('starships')} text="Starships" />
-          <Button callback={() => onCategorySelect('persons')} text="Persons" />
+        <div className="category-selection">
+          <h1>Select Category</h1>
+          <p className="category-description">Choose a category to play with:</p>
+          <div className="category-buttons">
+            <Button callback={() => onCategorySelect('starships')} text="Starships" />
+            <Button callback={() => onCategorySelect('persons')} text="Heroes" />
+          </div>
         </div>
       </GamePage>
     );
@@ -254,94 +250,79 @@ const Game = () => {
         onStartOver={onStartOver}
       />
 
-      {gameState.isTurnStarted && !gameState.selectedAttribute && (
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(97, 218, 251, 0.2) 0%, rgba(76, 175, 80, 0.2) 100%)',
-          border: '2px solid #61dafb',
-          borderRadius: '10px',
-          padding: '15px 30px',
-          margin: '20px auto',
-          maxWidth: '500px',
-          fontSize: '1.3rem',
-          fontWeight: 600,
-          color: '#61dafb',
-          textAlign: 'center',
-          boxShadow: '0 4px 15px rgba(97, 218, 251, 0.3)'
-        }}>
-          Player {gameState.isPlayerITurn ? 'I' : 'II'} - Click an attribute to compare
+      <div className="game-content">
+        <div className="game-controls">
+          <div className="controls-section">
+            <Button callback={onTurnStart} text="Draw new cards" />
+          </div>
+
+          {gameState.isTurnStarted && !gameState.selectedAttribute && (
+            <div className="instruction-message">
+              Player {gameState.isPlayerITurn ? 'I' : 'II'} - Click an attribute to compare
+            </div>
+          )}
+
+          {gameState.winnerMessage && (
+            <div className="winner-message">
+              {gameState.winnerMessage}
+            </div>
+          )}
         </div>
-      )}
 
-      {gameState.winnerMessage && (
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(97, 218, 251, 0.2) 100%)',
-          border: '2px solid #4CAF50',
-          borderRadius: '12px',
-          padding: '20px 40px',
-          margin: '30px auto',
-          maxWidth: '600px',
-          boxShadow: '0 4px 20px rgba(76, 175, 80, 0.3)',
-          fontSize: '1.5rem',
-          fontWeight: 600,
-          color: '#4CAF50',
-          textAlign: 'center',
-          animation: 'fadeIn 0.5s ease-in'
-        }}>
-          {gameState.winnerMessage}
+        <div className="game-area">
+          {gameState.selectedCategory === 'starships' && gameState.starships.length > 0 && (
+            <div className="category-section">
+              <h2 className="category-title">Starships</h2>
+              <div className="cards-container">
+                {gameState.starships.map((starship, index) => (
+                  <Card
+                    key={starship.id}
+                    onAttributeClick={handleAttributeClick}
+                    playerITurn={gameState.isPlayerITurn}
+                    isTurnStarted={gameState.isTurnStarted}
+                    cardType="Starship"
+                    attributes={[
+                      { name: 'hyperdriveRating', value: starship.hyperdriveRating },
+                      { name: 'maxSpeed', value: starship.maxSpeed },
+                      { name: 'crewSize', value: starship.crewSize },
+                      { name: 'cargoCapacity', value: starship.cargoCapacity },
+                    ]}
+                    name={starship.name}
+                    playerIndex={index}
+                    selectedAttribute={gameState.selectedAttribute}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {gameState.selectedCategory === 'persons' && gameState.persons.length > 0 && (
+            <div className="category-section">
+              <h2 className="category-title">Heroes</h2>
+              <div className="cards-container">
+                {gameState.persons.map((person, index) => (
+                  <Card
+                    key={person.id}
+                    onAttributeClick={handleAttributeClick}
+                    playerITurn={gameState.isPlayerITurn}
+                    isTurnStarted={gameState.isTurnStarted}
+                    cardType="Person"
+                    attributes={[
+                      { name: 'height', value: person.height },
+                      { name: 'mass', value: person.mass },
+                      { name: 'birthYear', value: person.birthYear },
+                      { name: 'forceSensitivity', value: person.forceSensitivity },
+                    ]}
+                    name={person.name}
+                    playerIndex={index}
+                    selectedAttribute={gameState.selectedAttribute}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
-
-      <Button callback={onTurnStart} text="Draw new cards" />
-
-      {<h1>All cards</h1>}
-
-      {gameState.selectedCategory === 'starships' && gameState.starships.length > 0 && <h2>Starships</h2>}
-      {gameState.selectedCategory === 'starships' && (
-        <div className="cards-container">
-          {gameState.starships.map((starship, index) => (
-            <Card
-              key={starship.id}
-              onAttributeClick={handleAttributeClick}
-              playerITurn={gameState.isPlayerITurn}
-              isTurnStarted={gameState.isTurnStarted}
-              cardType="Starship"
-              attributes={[
-                { name: 'hyperdriveRating', value: starship.hyperdriveRating },
-                { name: 'maxSpeed', value: starship.maxSpeed },
-                { name: 'crewSize', value: starship.crewSize },
-                { name: 'cargoCapacity', value: starship.cargoCapacity },
-              ]}
-              name={starship.name}
-              playerIndex={index}
-              selectedAttribute={gameState.selectedAttribute}
-            />
-          ))}
-        </div>
-      )}
-
-      {gameState.selectedCategory === 'persons' && gameState.persons.length > 0 && <h2>Persons</h2>}
-      {gameState.selectedCategory === 'persons' && (
-        <div className="cards-container">
-          {gameState.persons.map((person, index) => (
-            <Card
-              key={person.id}
-              onAttributeClick={handleAttributeClick}
-              playerITurn={gameState.isPlayerITurn}
-              isTurnStarted={gameState.isTurnStarted}
-              cardType="Person"
-              attributes={[
-                { name: 'height', value: person.height },
-                { name: 'mass', value: person.mass },
-                { name: 'birthYear', value: person.birthYear },
-                { name: 'forceSensitivity', value: person.forceSensitivity },
-              ]}
-              name={person.name}
-              playerIndex={index}
-              selectedAttribute={gameState.selectedAttribute}
-            />
-          ))}
-        </div>
-      )}
+      </div>
 
     </GamePage>
   );

@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
 const ButtonStyles = styled.button`
-    background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(97, 218, 251, 0.15) 100%);
-    border: 2px solid #4CAF50;
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.15) 0%, rgba(75, 0, 130, 0.15) 100%);
+    border: 2px solid #8a2be2;
     border-radius: 10px;
-    color: #4CAF50;
+    color: #8a2be2;
     padding: 14px 28px;
     text-align: center;
     text-decoration: none;
@@ -16,7 +16,7 @@ const ButtonStyles = styled.button`
     cursor: pointer;
     transition: all 0.3s ease;
     min-width: 200px;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.2);
     backdrop-filter: blur(10px);
     position: relative;
     overflow: hidden;
@@ -33,11 +33,11 @@ const ButtonStyles = styled.button`
     }
     
     &:hover {
-        background: linear-gradient(135deg, rgba(76, 175, 80, 0.3) 0%, rgba(97, 218, 251, 0.3) 100%);
-        border-color: #61dafb;
-        color: #61dafb;
+        background: linear-gradient(135deg, rgba(138, 43, 226, 0.3) 0%, rgba(75, 0, 130, 0.3) 100%);
+        border-color: #ba55d3;
+        color: #ba55d3;
         transform: translateY(-2px);
-        box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4);
+        box-shadow: 0 6px 25px rgba(138, 43, 226, 0.4);
         
         &::before {
             left: 100%;
@@ -46,12 +46,12 @@ const ButtonStyles = styled.button`
     
     &:active {
         transform: translateY(0);
-        box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+        box-shadow: 0 2px 10px rgba(138, 43, 226, 0.3);
     }
     
     &:focus {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+        box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.3);
     }
     
     div {

@@ -61,12 +61,6 @@ const Header = ({ scores, scoreI, scoreII, onStartOver }: HeaderProps) => {
                 )}
             </div>
         </div>
-        <div className="players">
-            <ul>
-                <li>Player I</li>
-                <li>Player II</li>
-            </ul>
-        </div>
     </HeaderStyles>
 }
 

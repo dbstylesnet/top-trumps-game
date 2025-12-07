@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const HeaderStyles = styled.div`
     .header {
-        background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+        // background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
         min-height: 12vh;
         display: flex;
         flex-direction: column;
@@ -29,7 +29,7 @@ const HeaderStyles = styled.div`
         align-items: center;
         justify-content: center;
         gap: 25px;
-        margin: 30px auto;
+        margin: 50px auto 30px;
         flex-wrap: wrap;
         max-width: 1200px;
     }
@@ -40,10 +40,21 @@ const HeaderStyles = styled.div`
         
         button {
             margin: 0;
-            min-width: auto;
+            min-width: 200px;
             padding: 12px 24px;
             font-size: 14px;
             font-weight: 600;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(97, 218, 251, 0.15) 100%) !important;
+            border: 2px solid #4CAF50 !important;
+            color: #4CAF50 !important;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2) !important;
+            
+            &:hover {
+                background: linear-gradient(135deg, rgba(76, 175, 80, 0.3) 0%, rgba(97, 218, 251, 0.3) 100%) !important;
+                border-color: #61dafb !important;
+                color: #61dafb !important;
+                box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4) !important;
+            }
         }
     }
     
@@ -196,39 +207,6 @@ const HeaderStyles = styled.div`
                 font-weight: 700;
                 color: #4CAF50;
                 line-height: 1;
-            }
-        }
-    }
-    
-    .players {
-        margin-top: 20px;
-        
-        ul {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            font-size: 24px;
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            
-            li {
-                padding: 10px 30px;
-                background: rgba(76, 175, 80, 0.1);
-                border-radius: 8px;
-                border: 1px solid rgba(76, 175, 80, 0.3);
-                font-weight: 500;
-                letter-spacing: 1px;
-                
-                &:first-child {
-                    border-color: rgba(97, 218, 251, 0.5);
-                    background: rgba(97, 218, 251, 0.1);
-                }
-                
-                &:last-child {
-                    border-color: rgba(255, 152, 0, 0.5);
-                    background: rgba(255, 152, 0, 0.1);
-                }
             }
         }
     }
