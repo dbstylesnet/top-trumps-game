@@ -231,7 +231,13 @@ const Game = () => {
         />
         <h1>Select Category</h1>
         <p>Choose a category to play with:</p>
-        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '20px' }}>
+        <div style={{ 
+          display: 'flex', 
+          gap: '30px', 
+          justifyContent: 'center', 
+          marginTop: '40px',
+          flexWrap: 'wrap'
+        }}>
           <Button callback={() => onCategorySelect('starships')} text="Starships" />
           <Button callback={() => onCategorySelect('persons')} text="Persons" />
         </div>
@@ -249,13 +255,40 @@ const Game = () => {
       />
 
       {gameState.isTurnStarted && !gameState.selectedAttribute && (
-        <h2>Player {gameState.isPlayerITurn ? 'I' : 'II'} - Click an attribute to compare</h2>
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(97, 218, 251, 0.2) 0%, rgba(76, 175, 80, 0.2) 100%)',
+          border: '2px solid #61dafb',
+          borderRadius: '10px',
+          padding: '15px 30px',
+          margin: '20px auto',
+          maxWidth: '500px',
+          fontSize: '1.3rem',
+          fontWeight: 600,
+          color: '#61dafb',
+          textAlign: 'center',
+          boxShadow: '0 4px 15px rgba(97, 218, 251, 0.3)'
+        }}>
+          Player {gameState.isPlayerITurn ? 'I' : 'II'} - Click an attribute to compare
+        </div>
       )}
 
       {gameState.winnerMessage && (
-        <h2 style={{ color: '#61dafb', textAlign: 'center', margin: '20px 0' }}>
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(97, 218, 251, 0.2) 100%)',
+          border: '2px solid #4CAF50',
+          borderRadius: '12px',
+          padding: '20px 40px',
+          margin: '30px auto',
+          maxWidth: '600px',
+          boxShadow: '0 4px 20px rgba(76, 175, 80, 0.3)',
+          fontSize: '1.5rem',
+          fontWeight: 600,
+          color: '#4CAF50',
+          textAlign: 'center',
+          animation: 'fadeIn 0.5s ease-in'
+        }}>
           {gameState.winnerMessage}
-        </h2>
+        </div>
       )}
 
       <Button callback={onTurnStart} text="Draw new cards" />
