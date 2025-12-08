@@ -29,33 +29,136 @@ const GamePage = styled.div`
     }
     
     .instruction-message {
-        background: linear-gradient(135deg, rgba(97, 218, 251, 0.2) 0%, rgba(76, 175, 80, 0.2) 100%);
-        border: 2px solid #61dafb;
         border-radius: 12px;
-        padding: 18px 35px;
+        padding: 20px 35px;
         max-width: 550px;
         width: 100%;
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         font-weight: 600;
-        color: #61dafb;
         text-align: center;
-        box-shadow: 0 4px 15px rgba(97, 218, 251, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         animation: slideIn 0.4s ease-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        
+        &.player-one-turn {
+            background: linear-gradient(135deg, rgba(0, 191, 255, 0.25) 0%, rgba(0, 191, 255, 0.1) 100%);
+            border: 2px solid #00BFFF;
+            box-shadow: 0 4px 20px rgba(0, 191, 255, 0.4);
+        }
+        
+        &.player-two-turn {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.25) 0%, rgba(255, 152, 0, 0.1) 100%);
+            border: 2px solid #ff9800;
+            box-shadow: 0 4px 20px rgba(255, 152, 0, 0.4);
+        }
+        
+        .player-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .player-icon-small {
+            font-size: 18px;
+        }
+        
+        .player-name {
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        &.player-one-turn {
+            .player-name {
+                color: #00BFFF;
+                text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+            }
+        }
+        
+        &.player-two-turn {
+            .player-name {
+                color: #ff9800;
+                text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+            }
+        }
+        
+        .instruction-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
     }
     
     .winner-message {
-        background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(97, 218, 251, 0.2) 100%);
-        border: 2px solid #4CAF50;
         border-radius: 12px;
-        padding: 25px 45px;
+        padding: 30px 45px;
         max-width: 650px;
         width: 100%;
-        box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #4CAF50;
-        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         animation: fadeIn 0.5s ease-in;
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.25) 0%, rgba(0, 191, 255, 0.25) 100%);
+        border: 2px solid #4CAF50;
+        
+        .winner-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .winner-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 2rem;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            letter-spacing: 2px;
+            
+            .player-icon-small {
+                font-size: 24px;
+            }
+            
+            &.player-one-badge {
+                color: #00BFFF;
+                border: 2px solid #00BFFF;
+                box-shadow: 0 0 20px rgba(0, 191, 255, 0.5);
+                text-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+            }
+            
+            &.player-two-badge {
+                color: #ff9800;
+                border: 2px solid #ff9800;
+                box-shadow: 0 0 20px rgba(255, 152, 0, 0.5);
+                text-shadow: 0 0 15px rgba(255, 152, 0, 0.6);
+            }
+        }
+        
+        .draw-badge {
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            color: #888;
+            border: 2px solid #888;
+            box-shadow: 0 0 20px rgba(136, 136, 136, 0.3);
+        }
+        
+        .winner-detail {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-top: 8px;
+        }
     }
     
     .game-area {
@@ -77,7 +180,7 @@ const GamePage = styled.div`
         font-weight: 700;
         text-align: center;
         margin: 0;
-        background: linear-gradient(90deg, #4CAF50, #61dafb);
+        background: linear-gradient(90deg, #4CAF50, #00BFFF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;

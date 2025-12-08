@@ -17,7 +17,7 @@ const HeaderStyles = styled.div`
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            background: linear-gradient(90deg, #4CAF50, #61dafb);
+            background: linear-gradient(90deg, #4CAF50, #00BFFF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -44,15 +44,15 @@ const HeaderStyles = styled.div`
             padding: 12px 24px;
             font-size: 14px;
             font-weight: 600;
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(97, 218, 251, 0.15) 100%) !important;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(0, 191, 255, 0.15) 100%) !important;
             border: 2px solid #4CAF50 !important;
             color: #4CAF50 !important;
             box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2) !important;
             
             &:hover {
-                background: linear-gradient(135deg, rgba(76, 175, 80, 0.3) 0%, rgba(97, 218, 251, 0.3) 100%) !important;
-                border-color: #61dafb !important;
-                color: #61dafb !important;
+                background: linear-gradient(135deg, rgba(76, 175, 80, 0.3) 0%, rgba(0, 191, 255, 0.3) 100%) !important;
+                border-color: #00BFFF !important;
+                color: #00BFFF !important;
                 box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4) !important;
             }
         }
@@ -95,17 +95,69 @@ const HeaderStyles = styled.div`
             }
             
             .history-item {
-                padding: 10px 15px;
+                padding: 12px 15px;
                 background: rgba(0, 0, 0, 0.3);
                 border-radius: 8px;
-                border-left: 3px solid #4CAF50;
+                border-left: 4px solid #4CAF50;
                 font-size: 14px;
                 color: #ccc;
                 transition: all 0.2s ease;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                
+                &.player-one-win {
+                    border-left-color: #00BFFF;
+                    background: rgba(0, 191, 255, 0.1);
+                    
+                    .player-indicator {
+                        color: #00BFFF;
+                        font-weight: 600;
+                    }
+                }
+                
+                &.player-two-win {
+                    border-left-color: #ff9800;
+                    background: rgba(255, 152, 0, 0.1);
+                    
+                    .player-indicator {
+                        color: #ff9800;
+                        font-weight: 600;
+                    }
+                }
+                
+                &.draw {
+                    border-left-color: #888;
+                    background: rgba(136, 136, 136, 0.1);
+                    
+                    .draw-indicator {
+                        color: #888;
+                        font-style: italic;
+                    }
+                }
                 
                 &:hover {
-                    background: rgba(76, 175, 80, 0.2);
                     transform: translateX(5px);
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                }
+                
+                .round-number {
+                    font-weight: 600;
+                    color: rgba(255, 255, 255, 0.9);
+                    min-width: 70px;
+                }
+                
+                .round-result {
+                    flex: 1;
+                    text-align: right;
+                }
+                
+                .player-indicator {
+                    display: inline-block;
+                    padding: 2px 8px;
+                    border-radius: 4px;
+                    margin-right: 4px;
                 }
             }
             
@@ -130,12 +182,14 @@ const HeaderStyles = styled.div`
     }
 
     .score {
-        background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(97, 218, 251, 0.15) 100%);
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(0, 191, 255, 0.15) 100%);
         border: 2px solid #4CAF50;
         border-radius: 12px;
-        width: 280px;
+        width: auto;
+        min-width: 360px;
+        max-width: 420px;
         color: white;
-        padding: 20px;
+        padding: 25px;
         font-size: 18px;
         box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
         backdrop-filter: blur(10px);
@@ -149,10 +203,11 @@ const HeaderStyles = styled.div`
         .title {
             font-weight: 600;
             font-size: 16px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             color: #4CAF50;
             text-transform: uppercase;
             letter-spacing: 1px;
+            text-align: center;
         }
     }
 
@@ -161,52 +216,145 @@ const HeaderStyles = styled.div`
         padding: 0;
         margin: 0;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         gap: 20px;
+        width: 100%;
         
         li {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px 25px;
+            padding: 20px 20px;
             background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-            min-width: 100px;
+            border-radius: 12px;
+            width: 100%;
+            flex: 1;
+            min-width: 0;
             border: 2px solid rgba(76, 175, 80, 0.3);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
             
-            &:first-child {
-                border-color: rgba(97, 218, 251, 0.5);
-                background: rgba(97, 218, 251, 0.15);
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, transparent, currentColor, transparent);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+            
+            &:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
                 
-                .player-score {
-                    color: #61dafb;
+                &::before {
+                    opacity: 0.6;
                 }
             }
             
-            &:last-child {
-                border-color: rgba(255, 152, 0, 0.5);
-                background: rgba(255, 152, 0, 0.15);
+            &.player-one {
+                border-color: rgba(0, 191, 255, 0.6);
+                box-shadow: 0 4px 15px rgba(0, 191, 255, 0.2);
+                
+
+                
+                .player-icon {
+                    border-color: #00BFFF;
+                    color: #ffffff;
+                    filter: drop-shadow(0 0 4px rgba(0, 191, 255, 0.6));
+                }
+                
+                .player-number {
+                    color: #00BFFF;
+                    text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+                }
+                
+                .player-score {
+                    color: #00BFFF;
+                    text-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+                }
+            }
+            
+            &.player-two {
+                border-color: rgba(255, 152, 0, 0.6);
+                box-shadow: 0 4px 15px rgba(255, 152, 0, 0.2);
+                
+
+                
+                .player-icon {
+                    border-color: #ff9800;
+                    color: #ffffff;
+                    filter: drop-shadow(0 0 4px rgba(255, 152, 0, 0.6));
+                }
+                
+                .player-number {
+                    color: #ff9800;
+                    text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+                }
                 
                 .player-score {
                     color: #ff9800;
+                    text-shadow: 0 0 15px rgba(255, 152, 0, 0.4);
                 }
             }
             
+            .player-header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 12px;
+                width: 100%;
+            }
+            
+            .player-icon {
+                font-size: 24px;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                border: 2px solid;
+                background: rgba(255, 255, 255, 0.1);
+                transition: all 0.3s ease;
+            }
+            
             .player-label {
-                font-size: 12px;
-                color: #aaa;
-                margin-bottom: 8px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+            }
+            
+            .player-text {
+                font-size: 11px;
+                color: rgba(255, 255, 255, 0.7);
                 text-transform: uppercase;
-                letter-spacing: 1px;
-                font-weight: 500;
+                letter-spacing: 2px;
+                font-weight: 600;
+            }
+            
+            .player-number {
+                font-size: 24px;
+                font-weight: 700;
+                line-height: 1;
+                transition: all 0.3s ease;
+                font-family: 'Georgia', serif;
             }
             
             .player-score {
-                font-size: 32px;
+                font-size: 42px;
                 font-weight: 700;
                 color: #4CAF50;
                 line-height: 1;
+                margin-top: 4px;
+                transition: all 0.3s ease;
+                font-family: 'Arial', sans-serif;
             }
         }
     }

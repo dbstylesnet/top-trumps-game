@@ -257,14 +257,41 @@ const Game = () => {
           </div>
 
           {gameState.isTurnStarted && !gameState.selectedAttribute && (
-            <div className="instruction-message">
-              Player {gameState.isPlayerITurn ? 'I' : 'II'} - Click an attribute to compare
+            <div className={`instruction-message ${gameState.isPlayerITurn ? 'player-one-turn' : 'player-two-turn'}`}>
+              <span className="player-badge">
+                <span className="player-icon-small">👤</span>
+                <span className="player-name">{gameState.isPlayerITurn ? 'Player I' : 'Player II'}</span>
+              </span>
+              <span className="instruction-text">- Click an attribute to compare</span>
             </div>
           )}
 
           {gameState.winnerMessage && (
             <div className="winner-message">
-              {gameState.winnerMessage}
+              <div className="winner-content">
+                {gameState.winnerMessage.includes('Draw') ? (
+                  <>
+                    <span className="draw-badge">🤝 Draw!</span>
+                    <div className="winner-detail">{gameState.winnerMessage.replace('Draw on ', '').replace('!', '')}</div>
+                  </>
+                ) : gameState.winnerMessage.includes('Player I') ? (
+                  <>
+                    <span className="winner-badge player-one-badge">
+                      <span className="player-icon-small">👤</span>
+                      Player I Wins!
+                    </span>
+                    <div className="winner-detail">{gameState.winnerMessage.split('Player I wins on ')[1]?.replace('!', '') || ''}</div>
+                  </>
+                ) : (
+                  <>
+                    <span className="winner-badge player-two-badge">
+                      <span className="player-icon-small">👤</span>
+                      Player II Wins!
+                    </span>
+                    <div className="winner-detail">{gameState.winnerMessage.split('Player II wins on ')[1]?.replace('!', '') || ''}</div>
+                  </>
+                )}
+              </div>
             </div>
           )}
         </div>
