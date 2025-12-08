@@ -1,9 +1,9 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Top Trumps",
+  "name": "Top Trumps Card Game",
   "icons": [
     {
-      "src": "logo192.png",
+      "src": "favicon-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
@@ -15,6 +15,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1a1a2e",
+  "background_color": "#0f0f1e"
 }
